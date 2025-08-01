@@ -5,49 +5,101 @@ import "cline/common.proto";
 option java_package = "bot.cline.proto";
 option java_multiple_files = true;
 
-// Service for account-related operations
+/**
+ * Service for account-related operations.
+ */
 service AccountService {
-  // Handles the user clicking the login link in the UI.
-  // Generates a secure nonce for state validation, stores it in secrets,
-  // and opens the authentication URL in the external browser.
+
+  /**
+   * Handles the user clicking the login link in the UI.
+   * Generates a secure nonce for state validation, stores it in secrets,
+   * and opens the authentication URL in the external browser.
+   *
+   * @param request The empty request object.
+   * @return A string containing the result of the login operation.
+   */
   rpc accountLoginClicked(EmptyRequest) returns (String);
-    
-  // Handles the user clicking the logout button in the UI.
-  // Clears API keys and user state.
+
+  /**
+   * Handles the user clicking the logout button in the UI.
+   * Clears API keys and user state.
+   *
+   * @param request The empty request object.
+   * @return An empty response indicating success.
+   */
   rpc accountLogoutClicked(EmptyRequest) returns (Empty);
 
-  // Subscribe to auth status update events (when authentication state changes)
-  rpc subscribeToAuthStatusUpdate(EmptyRequest) 
+  /**
+   * Subscribe to auth status update events (when authentication state changes).
+   *
+   * @param request The empty request object.
+   * @return A stream of AuthState objects representing the authentication state.
+   */
+  rpc subscribeToAuthStatusUpdate(EmptyRequest)
       returns (stream AuthState);
-    
-  // Handles authentication state changes from the Firebase context.
-  // Updates the user info in global state and returns the updated value.
-  rpc authStateChanged(AuthStateChangedRequest) 
+
+  /**
+   * Handles authentication state changes from the Firebase context.
+   * Updates the user info in global state and returns the updated value.
+   *
+   * @param request The AuthStateChangedRequest containing metadata and user information.
+   * @return An AuthState object representing the current authentication state.
+   */
+  rpc authStateChanged(AuthStateChangedRequest)
       returns (AuthState);
-    
-  // Fetches all user credits data
-  // (balance, usage transactions, payment transactions)
+
+  /**
+   * Fetches all user credits data including balance, usage transactions,
+   * and payment transactions.
+   *
+   * @param request The empty request object.
+   * @return A UserCreditsData object containing the user's credit information.
+   */
   rpc getUserCredits(EmptyRequest) returns (UserCreditsData);
 
+  /**
+   * Fetches organization credits data for a specified organization.
+   *
+   * @param request A GetOrganizationCreditsRequest with the organization ID.
+   * @return An OrganizationCreditsData object containing credit information for the organization.
+   */
   rpc getOrganizationCredits(GetOrganizationCreditsRequest) returns (OrganizationCreditsData);
 
-  // Fetches all user organizations data
-  // Returns a list of UserOrganization objects
+  /**
+   * Fetches all user organizations data. Returns a list of UserOrganization objects.
+   *
+   * @param request The empty request object.
+   * @return A UserOrganizationsResponse containing the user's organization information.
+   */
   rpc getUserOrganizations(EmptyRequest) returns (UserOrganizationsResponse);
 
+  /**
+   * Updates the user's organization settings.
+   *
+   * @param request A UserOrganizationUpdateRequest with the organization ID to update.
+   * @return An empty response indicating success.
+   */
   rpc setUserOrganization(UserOrganizationUpdateRequest) returns (Empty);
 }
 
+/**
+ * Request message for authentication state changes.
+ */
 message AuthStateChangedRequest {
   Metadata metadata = 1;
   UserInfo user = 2;
 }
 
+/**
+ * Message representing the current authentication state.
+ */
 message AuthState {
   optional UserInfo user = 1;
 }
 
-// User's information
+/**
+ * Information about a user.
+ */
 message UserInfo {
   string uid = 1;
   optional string display_name = 2;
@@ -56,6 +108,9 @@ message UserInfo {
   optional string app_base_url = 5; // Cline app base URL
 }
 
+/**
+ * Information about a user's organization.
+ */
 message UserOrganization {
   bool active = 1;
   string member_id = 2;
@@ -64,34 +119,55 @@ message UserOrganization {
   repeated string roles = 5; // ["admin", "member", "owner"]
 }
 
+/**
+ * Response message containing the list of user organizations.
+ */
 message UserOrganizationsResponse {
   repeated UserOrganization organizations = 1;
 }
 
+/**
+ * Request message for updating a user's organization settings.
+ */
 message UserOrganizationUpdateRequest {
   optional string organization_id = 1;
 }
 
+/**
+ * Data regarding a user's credits, including balance and transaction history.
+ */
 message UserCreditsData {
   UserCreditsBalance balance = 1;
   repeated UsageTransaction usage_transactions = 2;
   repeated PaymentTransaction payment_transactions = 3;
 }
 
+/**
+ * Request message for fetching organization credits data.
+ */
 message GetOrganizationCreditsRequest {
   string organization_id = 1;
 }
 
+/**
+ * Data regarding an organization's credits, including balance and transaction history.
+ */
 message OrganizationCreditsData {
   UserCreditsBalance balance = 1;
   string organization_id = 2;
   repeated OrganizationUsageTransaction usage_transactions = 3;
 }
 
+/**
+ * The user's current credit balance.
+ */
 message UserCreditsBalance {
   double current_balance = 1;
 }
 
+/**
+ * A transaction record for AI inference usage.
+ */
 message UsageTransaction {
   string ai_inference_provider_name = 1;
   string ai_model_name = 2;
@@ -107,6 +183,9 @@ message UsageTransaction {
   string user_id = 12;
 }
 
+/**
+ * A transaction record for payments made to the user's account.
+ */
 message PaymentTransaction {
   string paid_at = 1;
   string creator_id = 2;
@@ -114,6 +193,9 @@ message PaymentTransaction {
   double credits = 4;
 }
 
+/**
+ * A transaction record for AI inference usage within an organization.
+ */
 message OrganizationUsageTransaction {
   string ai_inference_provider_name = 1;
   string ai_model_name = 2;

@@ -6,6 +6,14 @@ import { convertToOllamaMessages } from "../transform/ollama-format"
 import { ApiStream } from "../transform/stream"
 import { withRetry } from "../retry"
 
+/**
+ * OllamaHandler for interacting with the Ollama API.
+ *
+ * This handler provides methods to configure and interact with local Ollama models,
+ * including setting up the base URL, model ID, context window size, and handling
+ * API requests with retry logic. For performance optimization tips when using
+ * Ollama with Cline, refer to the documentation in 'docs/provider-config/ollama-performance-tips.mdx'.
+ */
 interface OllamaHandlerOptions {
 	ollamaBaseUrl?: string
 	ollamaModelId?: string

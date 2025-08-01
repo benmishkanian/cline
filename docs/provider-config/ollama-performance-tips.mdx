@@ -1,0 +1,57 @@
+---
+title: "Performance Optimization Tips for Ollama"
+---
+
+## Performance Optimization Tips for Using Ollama with Cline
+
+Running local models like Ollama can offer significant benefits in terms of privacy and cost, but it also comes with performance considerations. This guide provides tips and best practices to help you optimize your experience when using Ollama with Cline.
+
+### Hardware Recommendations
+
+To achieve optimal performance, consider the following hardware specifications:
+
+- **GPU**: A modern GPU with at least 8GB VRAM is recommended (e.g., NVIDIA RTX 3070 or better).
+- **RAM**: At minimum, 32GB of system RAM to handle large models and tasks.
+- **Storage**: Fast SSD storage for quick data access and model loading.
+- **Cooling**: Ensure you have an effective cooling solution to maintain stable performance during intensive tasks.
+
+### Model Selection
+
+Choosing the right model is crucial for balancing performance and functionality:
+
+- **Smaller Models (7B)**: Suitable for basic coding tasks and limited tool use. Recommended for less powerful hardware.
+- **Medium Models (14B, 32B)**: Offer better coding capabilities but may have inconsistent tool use. Require more resources.
+- **Large Models (70B)**: Provide the best local performance but demand high-end hardware.
+
+### Context Window Management
+
+The context window size significantly impacts both performance and functionality:
+
+- **Default Settings**: Ollama models often default to a 2048-token context window, which can be insufficient for complex tasks.
+- **Recommended Size**: Aim for at least 12,000 tokens, with 32,000 tokens being ideal for most use cases.
+
+To adjust the context size:
+
+```bash
+ollama run <model_name>
+/set parameter num_ctx 32768
+/save your_custom_model_name
+```
+
+### Resource Monitoring
+
+Keep an eye on system resources to ensure smooth operation:
+
+- **GPU/CPU Usage**: Monitor usage through task manager or dedicated tools like NVIDIA System Management Interface.
+- **Temperature**: Ensure temperatures remain within safe ranges to prevent thermal throttling.
+- **RAM Usage**: Keep track of memory consumption, especially when running large models.
+
+### Best Practices
+
+1. **Start Small**: Begin with smaller models and gradually move to larger ones as you become more comfortable with the system.
+2. **Save Work Frequently**: Local models can be resource-intensive; save your progress regularly to avoid data loss.
+3. **Task Simplification**: Break down complex tasks into simpler steps to reduce resource demands.
+4. **Regular Maintenance**: Periodically check for hardware drivers and software updates to maintain optimal performance.
+5. **Switch to Cloud Models**: For highly complex or resource-demanding tasks, consider using cloud-based models to ensure reliability.
+
+By following these tips, you can enhance your experience with Ollama and Cline, ensuring a balance between performance and functionality while minimizing potential issues.
